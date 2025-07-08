@@ -80,7 +80,7 @@ public class AdminController {
     Order order = orderRepository.findById(id).orElseThrow();
     order.setStatus("LIVRAT");
     orderRepository.save(order);
-    return "redirect:/admin/dashboard";
+    return "redirect:/admin/orders";
     }
     
    @PostMapping("/onsite/{id}/delete")

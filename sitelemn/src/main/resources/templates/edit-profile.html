@@ -10,7 +10,9 @@
   <ul>
     
     <li><a th:href="@{/cont}">My Account</a></li>
-    <li><a th:href="@{/logout}">Logout</a></li>
+    <li th:if="${#authorization.expression('isAuthenticated()')}"><form th:action="@{/logout}" method="post">
+    <input type="submit" class="logout-link"  value="Logout"/>
+</form></li>
   </ul>
 </nav>
 

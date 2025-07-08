@@ -92,6 +92,7 @@ nav ul li a {
   color: white;
   text-decoration: none;
   font-weight: bold;
+  
 }
 
 nav ul li a:hover {
@@ -153,3 +154,14 @@ button {
   font-weight: bold;
 }
 
+.logout-link {
+   
+    cursor: pointer;
+    padding: 1px 4px;
+    font: inherit;
+    text-decoration: none;
+  }
+
+  .logout-link:hover {
+    text-decoration: underline;
+  }

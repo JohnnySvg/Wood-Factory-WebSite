@@ -14,7 +14,9 @@
     </li>
     <li th:if="${#authorization.expression('hasRole(''ADMIN'')')}"><a th:href="@{/admin/orders}">Administration Orders</a></li>
   <li th:if="${#authorization.expression('hasRole(''ADMIN'')')}"><a th:href="@{/admin/users}">Administration Users</a></li>
-    <li><a th:href="@{/logout}">Logout</a></li>
+    <li th:if="${#authorization.expression('isAuthenticated()')}"><form th:action="@{/logout}" method="post">
+    <input type="submit" class="logout-link"  value="Logout"/>
+</form></li>
   </ul>
 </nav>
 

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Authentication</title>
+  <link rel="stylesheet" th:href="@{/css/styles.css}" />
+</head>
+<body>
+<nav>
+  <ul>
+    <li><a th:href="@{/}">Login</a></li>
+    <li><a th:href="@{/about}">About Us</a></li>
+    <li><a th:href="@{/products}">Products</a></li>
+    <li th:if="${#authorization.expression('hasRole(''CLIENT'')')}">
+  <a th:href="@{/checkout}">Checkout</a>
+</li>
+
+<li th:if="${#authorization.expression('hasRole(''CLIENT'')')}">
+  <a th:href="@{/cont}">My Account</a>
+</li>
+
+    <li th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+      <a th:href="@{/admin/dashboard}">Administration Products</a>
+    </li>
+    
+    <li th:if="${#authorization.expression('hasRole(''ADMIN'')')}"><a th:href="@{/admin/orders}">Administration Orders</a></li>
+  <li th:if="${#authorization.expression('hasRole(''ADMIN'')')}"><a th:href="@{/admin/users}">Administration Users</a></li>
+
+    <li th:if="${#authorization.expression('isAuthenticated()')}">
+      <a th:href="@{/logout}">Logout</a>
+    </li>
+  </ul>
+</nav>
+
+<header>
+  <h1>Login</h1>
+</header>
+
+<div class="container">
+
+  <!-- ✅ Blocul de afișare a mesajelor -->
+  <div th:if="${param.required}">
+    <p style="color: red;">Login required to access this page.</p>
+  </div>
+  <div th:if="${param.error}">
+    <p style="color: red;">Incorrect username or password. Please try again.</p>
+  </div>
+  <div th:if="${param.logout}">
+    <p style="color: green;">You have successfully logged out.</p>
+  </div>
+
+  <!-- ✅ Formularul de login -->
+  <form th:action="@{/login}" method="post">
+    <input type="text" name="username" placeholder="Username" required />
+    <input type="password" name="password" placeholder="Password" required />
+    <button type="submit">Login</button>
+  </form>
+
+  <p><a href="/register">Don't have an account? Register</a></p>
+</div>
+
+</body>
+</html>

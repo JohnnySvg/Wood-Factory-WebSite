@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>My Account</title>
+  <link rel="stylesheet" th:href="@{/css/styles.css}" />
+</head>
+<body>
+<nav>
+  <ul>
+    <li th:if="${not #authorization.expression('isAuthenticated()')}"><a th:href="@{/}">Login</a></li>
+    <li><a th:href="@{/about}">About Us</a></li>
+    <li><a th:href="@{/products}">Products</a></li>
+    <li><a th:href="@{/checkout}">Checkout</a></li>
+    <li><a th:href="@{/cont}">My Account</a></li>
+    
+    <!-- Afișează linkul doar dacă userul este autentificat și are rolul ADMIN -->
+    <li th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+      <a th:href="@{/admin/dashboard}">Administration Products</a>
+    </li>
+    
+    <li th:if="${#authorization.expression('hasRole(''CLIENT'')')}"><a th:href="@{/contact}">On-Site Service</a></li>
+
+    <li><a th:href="@{/logout}">Logout</a></li>
+  </ul>
+</nav>
+  <header>
+    <h1>My Account</h1>
+  </header>
+
+  <div class="container">
+  <a href="/cont/date-personale" class="cancel-button">Update account details</a>
+  </div>
+  <div class="container">
+    <h2>Order history</h2>
+    <div th:each="order : ${orders}">
+      <p><strong th:text="${#temporals.format(order.date, 'dd/MM/yyyy HH:mm')}"></strong> - Status: <span th:text="${order.status}"></span></p>
+    </div>
+    <br>
+    </div>
+    <div class="container">
+    <h2>On-Site Service Requests</h2>
+<div th:if="${onsiteRequests != null and #lists.isEmpty(onsiteRequests) == false}">
+  <div th:each="req : ${onsiteRequests}">
+    <p>
+      <strong>Type:</strong> <span th:text="${req.serviceType}"></span><br/>
+      <strong>Submitted:</strong> <span th:text="${#temporals.format(req.requestDate, 'dd/MM/yyyy HH:mm')}"></span><br/>
+
+      <strong>Address:</strong> <span th:text="${req.address}"></span><br/>
+      <strong>Phone:</strong> <span th:text="${req.phone}"></span>
+    </p>
+    <hr/>
+  </div>
+</div>
+<div th:if="${#lists.isEmpty(onsiteRequests)}">
+  <p>You haven't made any on-site service requests yet.</p>
+</div>
+    
+  </div>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Products Admin</title>
+  <link rel="stylesheet" th:href="@{/css/styles.css}" />
+</head>
+<body>
+<nav>
+  <ul>
+    <li th:if="${not #authorization.expression('isAuthenticated()')}"><a th:href="@{/}">Login</a></li>
+    <li><a th:href="@{/products}">Products</a></li>
+    
+    <!-- Afișează linkul doar dacă userul este autentificat și are rolul ADMIN -->
+    <li th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+      <a th:href="@{/admin/dashboard}">Administration Products</a>
+    </li>
+    <li th:if="${#authorization.expression('hasRole(''ADMIN'')')}"><a th:href="@{/admin/orders}">Administration Orders</a></li>
+  <li th:if="${#authorization.expression('hasRole(''ADMIN'')')}"><a th:href="@{/admin/users}">Administration Users</a></li>
+
+    <li><a th:href="@{/logout}">Logout</a></li>
+  </ul>
+</nav>
+  <header>
+    <h1>Admin - Products</h1>
+  </header>
+  <div class="container">
+
+    <h2>Products</h2>
+    
+    <div class="container" th:each="prod : ${products}">
+      <p><strong th:text="${prod.name}"></strong> - Stock: <span th:text="${prod.stock}"></span></p>
+      <form th:action="@{'/admin/products/' + ${prod.id} + '/stock'}" method="post">
+        <input name="stock" type="number" min="0" />
+        <button type="submit">Update stock</button>
+      </form>
+    </div>
+
+    
+
+  </div>
+</body>
+</html>

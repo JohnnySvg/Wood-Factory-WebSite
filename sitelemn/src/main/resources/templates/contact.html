@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>On-Site Service</title>
+  <link rel="stylesheet" th:href="@{/css/styles.css}" />
+</head>
+<body>
+<nav>
+  <ul>
+    <li th:if="${not #authorization.expression('isAuthenticated()')}"><a th:href="@{/}">Login</a></li>
+    <li><a th:href="@{/about}">About Us</a></li>
+    <li><a th:href="@{/products}">Products</a></li>
+    <li th:if="${#authorization.expression('hasRole(''CLIENT'')')}">
+      <a th:href="@{/checkout}">Checkout</a>
+    </li>
+    <li th:if="${#authorization.expression('hasRole(''CLIENT'')')}">
+      <a th:href="@{/cont}">My Account</a>
+    </li>
+    <li th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+      <a th:href="@{/admin/dashboard}">Admin Products</a>
+    </li>
+    <li th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+      <a th:href="@{/admin/orders}">Admin Orders</a>
+    </li>
+    <li th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+      <a th:href="@{/admin/users}">Admin Users</a>
+    </li>
+    <li><a th:href="@{/contact}">On-Site Service</a></li>
+    <li th:if="${#authorization.expression('isAuthenticated()')}">
+      <a th:href="@{/logout}">Logout</a>
+    </li>
+  </ul>
+</nav>
+
+<header>
+  <h1>Request On-Site Service</h1>
+</header>
+
+<div class="container">
+  <h2>Apply for Service at Your Location</h2>
+  <form th:action="@{/onsite/apply}" method="post">
+    <label for="serviceType"><strong>Service Type:</strong></label>
+    <select name="serviceType" required>
+      <option value="">-- Select a service --</option>
+      <option value="Furniture Restoration">Furniture Restoration</option>
+      <option value="Wood Structure Assembly">Wood Structure Assembly</option>
+      <option value="CNC Engraving">CNC Engraving</option>
+    </select>
+
+    <input type="text" name="name" placeholder="Your Full Name" th:value="${user?.fullName}" required />
+    <input type="text" name="phone" placeholder="Phone Number" th:value="${user?.phone}" required 
+     pattern="\d*" maxlength="10"
+         oninput="this.value = this.value.replace(/[^0-9]/g, '')"/>
+    <input type="text" name="address" placeholder="Service Address" th:value="${user?.address}" required />
+    
+    <button type="submit">Submit Application</button>
+  </form>
+</div>
+<div class="container">
+  <h2>Our Location</h2>
+  
+  <div style="text-decoration:none; overflow:hidden;max-width:100%;width:650px;height:500px;"><div id="embed-ded-map-canvas" style="height:100%; width:100%;max-width:100%;"><iframe style="height:100%;width:100%;border:0;" frameborder="0" src="https://www.google.com/maps/embed/v1/place?q=YAC+BESTWOOD+SRL&key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8"></iframe></div><a class="google-maps-html" href="https://www.bootstrapskins.com/themes" id="inject-map-data">premium bootstrap themes</a><style>#embed-ded-map-canvas img.text-marker{max-width:none!important;background:none!important;}img{max-width:none}</style></div>
+
+  <h2>Contact Info</h2>
+  <p><strong>Phone:</strong> <a href="tel:+40712345678">+40 712 345 678</a></p>
+  <p><strong>Email:</strong> <a href="mailto:atelier@lemnart.ro">atelier@lemnart.ro</a></p>
+  <p><strong>Business Hours:</strong> Monday – Friday: 09:00 - 17:00</p>
+
+  <h2>Follow Us</h2>
+  <p>
+    <a href="https://facebook.com" target="_blank">Facebook</a> |
+    <a href="https://instagram.com" target="_blank">Instagram</a> |
+    <a href="https://tiktok.com" target="_blank">TikTok</a>
+  </p>
+</div>
+
+</body>
+</html>

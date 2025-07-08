@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Product details</title>
+  <link rel="stylesheet" th:href="@{/css/styles.css}" />
+</head>
+<body>
+<nav>
+  <ul>
+    <li th:if="${not #authorization.expression('isAuthenticated()')}"><a th:href="@{/}">Login</a></li>
+    <li th:if="${#authorization.expression('hasRole(''CLIENT'')')}"><a th:href="@{/about}">About Us</a></li>
+    <li><a th:href="@{/products}">Products</a></li>
+    <li th:if="${#authorization.expression('hasRole(''CLIENT'')')}">
+  <a th:href="@{/checkout}">Checkout</a>
+</li>
+
+<li th:if="${#authorization.expression('hasRole(''CLIENT'')')}">
+  <a th:href="@{/cont}">My Account</a>
+</li>
+    
+    <!-- Afișează linkul doar dacă userul este autentificat și are rolul ADMIN -->
+    <li th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+      <a th:href="@{/admin/dashboard}">Administration Products</a>
+    </li>
+
+    <li th:if="${#authorization.expression('isAuthenticated()')}">
+      <a th:href="@{/logout}">Logout</a>
+    </li>
+  </ul>
+</nav>
+  <header>
+    <h1 th:text="${product.name}"></h1>
+  </header>
+  <br>
+  
+  
+  <div class="container">
+  <a th:href="@{/products}" class="cancel-button">&lt;&lt;&lt;Back to product list </a>
+    <p th:text="${product.description}"></p>
+    <img th:src="${product.imageUrl}" alt="Imagine produs" style="max-width: 300px; height: auto; display: block; margin: 0 auto;" />
+
+    
+    <p>Price: <strong th:text="${product.price} + ' RON'"></strong></p>
+    <p th:if="${product.stock == 0}" style="color:red;">Out of stock</p>
+
+    <h2>Reviews:</h2>
+    <div th:each="r : ${reviews}">
+      <p><strong th:text="${r.user.username}"></strong> - <span th:text="${r.rating}"></span> stars</p>
+      <p th:text="${r.comment}"></p>
+      <p><small th:text="${#temporals.format(r.createdAt, 'dd/MM/yyyy HH:mm')}"></small></p>
+      <hr/>
+    </div>
+
+<div th:if="${#authorization.expression('hasRole(''CLIENT'')')}">
+    <h3>Add your review:</h3>
+    <form th:action="@{'/products/' + ${product.id} + '/review'}" method="post">
+      <textarea name="comment" required placeholder="Comentariu..."></textarea>
+      <input name="rating" type="number" min="1" max="5" required placeholder="Rating (1-5)" />
+      <button type="submit">Send review</button>
+    </form>
+    </div>
+  </div>
+</body>
+</html>

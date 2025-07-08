@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ro" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Checkout </title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <style>
+  		  body {
+ 		 margin: 0;
+  		 padding: 0;
+ 		 min-height: 100vh;
+ 		 background: linear-gradient(to bottom, #add8e6, #4682b4);
+ 		 color: #333;
+		}
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: #fdfdfd;
+            border-radius: 12px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        li {
+            border-bottom: 1px solid #ddd;
+            padding: 0.5rem 0;
+        }
+
+        label {
+            display: block;
+            margin: 1rem 0 0.3rem;
+            font-weight: bold;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 0.5rem;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            margin-top: 1.5rem;
+            padding: 0.7rem 1.5rem;
+            background-color: #2b5dab;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        button:hover {
+            background-color: #2c3e50;
+        }
+
+        .nav {
+            background: #7f5a36;
+            padding: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .nav a {
+            color: white;
+            margin-right: 1rem;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .nav a:hover {
+            text-decoration: underline;
+        }
+        
+        .nav {
+        background-color: #2c3e50;
+        padding: 1rem;
+    }
+
+    .nav ul {
+        list-style: none;
+        display: flex;
+        justify-content: center; /* Alinează pe mijloc */
+        gap: 2rem; /* Spațiu între linkuri */
+        margin: 0;
+        padding: 0;
+    }
+
+    .nav ul li a {
+        color: white;
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+    .nav ul li a:hover {
+        text-decoration: underline;
+    }
+    </style>
+</head>
+<body>
+
+<!-- Meniu Navigare -->
+<nav>
+<div class="nav">
+<ul>
+    
+    <li><a href="/produse" th:href="@{/products}">Products</a></li>
+    <li><a href="/checkout" th:href="@{/checkout}">Checkout</a></li>
+    
+    </ul>>
+</div>
+</nav>
+<div class="container">
+    <h2>Order Completion</h2>
+
+    <form th:action="@{/checkout}" method="post">
+        <h3>Products in cart</h3>
+        <ul>
+            <li th:each="item : ${cartItems}">
+                <strong th:text="${item.product.name}">Product</strong> -
+                <span th:text="${item.quantity}">0</span> piece -
+                <span th:text="${item.product.price}">0.00</span> lei
+            </li>
+        </ul>
+        
+        <h4 th:if="${#lists.size(cartItems) > 0}">Total: <span th:text="${totalPrice}">0.00</span> lei</h4>
+
+        <label for="address">Delivery address</label>
+        <input type="text" id="address" name="address" th:value="${user?.address}" required />
+
+        <label for="phone">Phone</label>
+<input type="text" id="phone" name="phone" pattern="\d{1,10}" title="Doar cifre, maxim 10 caractere" th:value="${user?.phone}" required 
+       maxlength="10"
+       oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
+        
+        <h3>Credit card details</h3>
+
+        <label for="cardNumber">Number card:</label>
+        <input type="text" id="cardNumber" name="cardNumber" pattern="\d{16}" maxlength="16" minlength="16"
+               placeholder="1234 5678 9012 3456" required
+               oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
+        <small>16 digit number.</small>
+        <br>
+
+        <label for="cardName">Name on card:</label>
+        <input type="text" id="cardName" name="cardName" pattern="[A-Z\s]+" placeholder="EX: ION POPESCU"
+               title="Folosiți doar litere mari" required>
+        <small>Must be allcaps.</small>
+        <br>
+
+        <label for="expiry">Expiration date:</label>
+        <input type="date" id="expiry" name="expiry" required min="" />
+        <small>Ex: select current or later date than today.</small>
+        <br>
+
+        <label for="cvv">CVV:</label>
+        <input type="text" id="cvv" name="cvv" pattern="\d{3,4}" maxlength="4" placeholder="123" required
+               oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
+        <small>3 or 4 digit code (from the back of the card).</small>
+        <br>
+        
+        <div th:if="${error}" class="error-message" style="color: red; font-weight: bold;">
+    <p th:text="${error}"></p>
+</div>
+		<div th:if="${#lists.size(cartItems) > 0}">
+        <button type="submit">Place order</button>
+        </div>
+    </form>
+    <form th:action="@{/cart/cancel}" method="post" style="display:inline;">
+        <button type="submit" style="margin-left: 10px;">Cancel</button>
+    </form>
+</div>
+
+<script>
+  
+  const expiryInput = document.getElementById('expiry');
+  const today = new Date().toISOString().split('T')[0]; // format yyyy-mm-dd
+  expiryInput.min = today;
+</script>
+
+</body>
+</html>

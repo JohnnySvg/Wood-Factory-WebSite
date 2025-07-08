@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>About Us</title>
+  <link rel="stylesheet" th:href="@{/css/styles.css}" />
+  <style>
+  h2 {
+  color: #0a3d62;
+  }
+  </style>
+</head>
+<body>
+
+<nav>
+  <ul>
+    <li th:if="${not #authorization.expression('isAuthenticated()')}"><a th:href="@{/}">Login</a></li>
+    <li><a th:href="@{/about}">About Us</a></li>
+    <li><a th:href="@{/products}">Products</a></li>
+    <li th:if="${#authorization.expression('hasRole(''CLIENT'')')}"><a th:href="@{/checkout}">Checkout</a></li>
+    <li th:if="${#authorization.expression('hasRole(''CLIENT'')')}"><a th:href="@{/cont}">My Account</a></li>
+    <li th:if="${#authorization.expression('hasRole(''CLIENT'')')}"><a th:href="@{/contact}">On-Site Service</a></li>
+    <li th:if="${#authorization.expression('isAuthenticated()')}"><a th:href="@{/logout}">Logout</a></li>
+  </ul>
+</nav>
+
+<header>
+  <h1>About Us</h1>
+</header>
+
+<div class="container">
+  <h2 class="gradient-yellow-gold">Our Story</h2>
+  <h3>
+    LemnArt was founded in 2018 from a shared dream between lifelong friends passionate about woodworking and design.<br><br>
+    Inspired by the timeless beauty and versatility of wood, we created LemnArt to bring craftsmanship and creativity to homes and spaces throughout Romania.
+  </h3>
+  
+  </div>
+  <div class="container">
+
+  <h2 class="gradient-red">Our Passion</h2>
+  <h3>
+    Every piece we work on reflects our commitment to precision and artistry. From restoring older furniture pieces to crafting intricate wooden structures and CNC engravings,
+    we treat every project as a unique expression of our craft.
+  </h3>
+  
+  
+  </div>
+  <div class="container">
+
+  <h2 class="gradient-green">Our Team</h2>
+  <h3>
+    Our team is composed of skilled artisans, engineers, and designers with over 15 years of experience in woodworking and CNC technology. <br><br>
+    What unites us is not just our expertise, but our deep love for working with natural materials and our desire to bring warmth and personality into every customer’s space.
+  </h3>
+</div>
+
+</body>
+</html>

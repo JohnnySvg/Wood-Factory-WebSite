@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Update Account Details</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+</head>
+<body>
+
+<nav>
+  <ul>
+    
+    <li><a th:href="@{/cont}">My Account</a></li>
+    <li><a th:href="@{/logout}">Logout</a></li>
+  </ul>
+</nav>
+
+<header>
+    <h1>Update Account Details</h1>
+</header>
+
+<div class="container">
+    <form th:action="@{/cont/date-personale}" method="post" th:object="${user}">
+        <input type="hidden" th:field="*{id}" />
+
+        <label for="fullName">Full Name:</label>
+        <input type="text" th:field="*{fullName}" id="fullName" required />
+
+        <label for="email">Email:</label>
+        <input type="email" th:field="*{email}" id="email" required />
+
+        <label for="username">Username:</label>
+        <input type="text" th:field="*{username}" id="username" required />
+
+        <label for="newPassword">New password:</label>
+        <input type="password" name="newPassword" id="newPassword" />
+
+        <label for="confirmPassword">Confirm password:</label>
+        <input type="password" name="confirmPassword" id="confirmPassword" />
+
+        <button type="submit">Save</button>
+        <a href="/cont" class="cancel-button">Cancel</a>
+    </form>
+
+    <div th:if="${error}" class="error-message" th:text="${error}"></div>
+    <div th:if="${success}" class="success-message" th:text="${success}"></div>
+</div>
+
+</body>
+</html>

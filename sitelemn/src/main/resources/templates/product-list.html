@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Produse</title>
+  <link rel="stylesheet" th:href="@{/css/styles.css}" />
+</head>
+<body>
+<nav>
+  <ul>
+    <li th:if="${not #authorization.expression('isAuthenticated()')}"><a th:href="@{/}">Login</a></li>
+    <li th:if="${#authorization.expression('!hasRole(''ADMIN'')')}"><a th:href="@{/about}">About Us</a></li>
+    <li><a th:href="@{/products}">Products</a></li>
+    <li th:if="${#authorization.expression('hasRole(''CLIENT'')')}">
+  <a th:href="@{/checkout}">Checkout</a>
+</li>
+
+<li th:if="${#authorization.expression('hasRole(''CLIENT'')')}">
+  <a th:href="@{/cont}">My Account</a>
+</li>
+    
+    <!-- Afișează linkul doar dacă userul este autentificat și are rolul ADMIN -->
+    <li th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+      <a th:href="@{/admin/dashboard}">Administration Products</a>
+    </li>
+    
+    <li th:if="${#authorization.expression('hasRole(''ADMIN'')')}"><a th:href="@{/admin/orders}">Administration Orders</a></li>
+  <li th:if="${#authorization.expression('hasRole(''ADMIN'')')}"><a th:href="@{/admin/users}">Administration Users</a></li>
+  
+  <li th:if="${#authorization.expression('hasRole(''CLIENT'')')}"><a th:href="@{/contact}">On-Site Service</a></li>
+
+    <li th:if="${#authorization.expression('isAuthenticated()')}">
+      <a th:href="@{/logout}">Logout</a>
+    </li>
+  </ul>
+</nav>
+  <header>
+    <h1>Product catalog</h1>
+  </header>
+  <div class="container">
+  <form method="get" th:action="@{/products}" class="filter-form">
+  <label>Category filter:</label>
+  <select name="category" th:value="${selectedCategory}">
+    <option value="">Toate</option>
+    <option value="mese" th:selected="${selectedCategory == 'mese'}">Mese</option>
+    <option value="scaune" th:selected="${selectedCategory == 'scaune'}">Scaune</option>
+    <option value="biblioteci" th:selected="${selectedCategory == 'biblioteci'}">Biblioteci</option>
+    <option value="rafturi" th:selected="${selectedCategory == 'rafturi'}">Rafturi</option>
+    <option value="paturi" th:selected="${selectedCategory == 'paturi'}">Paturi</option>
+    <option value="fotolii" th:selected="${selectedCategory == 'fotolii'}">Fotolii</option>
+    <option value="usi" th:selected="${selectedCategory == 'usi'}">Uși</option>
+    <option value="parchet lemn" th:selected="${selectedCategory == 'parchet lemn'}">Parchet lemn</option>
+    <option value="grinzi" th:selected="${selectedCategory == 'grinzi'}">Grinzi</option>
+    <option value="placaj lemn" th:selected="${selectedCategory == 'placaj lemn'}">Placaj Lemn</option>
+    <option value="mdf" th:selected="${selectedCategory == 'mdf'}">MDF (Medium-Density Fiberboard)</option>
+    <option value="osb" th:selected="${selectedCategory == 'osb'}">OSB (Oriented Strand Board)</option>
+  </select>
+
+  <label>Sort:</label>
+  <select name="sort" th:value="${selectedSort}">
+    <option value="">Fără sortare</option>
+    <option value="asc" th:selected="${selectedSort == 'asc'}">Preț crescător</option>
+    <option value="desc" th:selected="${selectedSort == 'desc'}">Preț descrescător</option>
+  </select>
+
+  <button type="submit">Apply</button>
+</form>
+</div>
+<div class="container">
+    <ul>
+  <li class="container" th:each="prod : ${products}">
+    <a th:href="@{'/products/' + ${prod.id}}" th:text="${prod.name}"></a>
+    
+    <div >
+      <span th:text="${prod.price} + ' RON'"></span><br />
+      <span th:if="${prod.stock > 0}" th:text="'Current stock: ' + ${prod.stock}"></span>
+      <span th:if="${prod.stock == 0}" style="color:red;">Out of stock</span>
+    </div>
+
+    <!-- Formular pentru utilizatori autentificați și produse în stoc -->
+    <div th:if="${prod.stock > 0} and ${#authorization.expression('hasRole(''CLIENT'')')}">
+      <form th:action="@{/cart/add}" method="post" style="margin-top: 10px;">
+        <input type="hidden" name="productId" th:value="${prod.id}" />
+
+        <label for="quantity">Quantity:</label>
+        <input type="number" name="quantity" min="1"
+               th:attr="max=${prod.stock}" value="1" required />
+
+        <button type="submit">Add to Cart</button>
+      </form>
+    </div>
+    
+  </li>
+</ul>
+  </div>
+</body>
+</html>

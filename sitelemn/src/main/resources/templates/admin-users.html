@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Admin - Users</title>
+  <link rel="stylesheet" th:href="@{/css/styles.css}" />
+</head>
+<body>
+<nav>
+  <ul>
+    <li th:if="${not #authorization.expression('isAuthenticated()')}"><a th:href="@{/}">Login</a></li>
+    <li><a th:href="@{/products}">Products</a></li>
+    <li th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+      <a th:href="@{/admin/dashboard}">Administration Products</a>
+    </li>
+    <li th:if="${#authorization.expression('hasRole(''ADMIN'')')}"><a th:href="@{/admin/orders}">Administration Orders</a></li>
+  <li th:if="${#authorization.expression('hasRole(''ADMIN'')')}"><a th:href="@{/admin/users}">Administration Users</a></li>
+    <li><a th:href="@{/logout}">Logout</a></li>
+  </ul>
+</nav>
+
+<header><h1>Admin - Users</h1></header>
+
+<div class="container">
+  <h2>Users</h2>
+  <div th:each="usr : ${users}">
+    <p th:text="${usr.username}"></p>
+    <form th:action="@{'/admin/users/' + ${usr.id} + '/delete'}" method="post">
+      <button type="submit">Delete account</button>
+    </form>
+  </div>
+</div>
+
+</body>
+</html>
